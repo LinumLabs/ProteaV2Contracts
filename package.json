@@ -7,9 +7,11 @@
     "lib": "lib"
   },
   "scripts": {
+    "init": "dapp install ds-test",
     "build": "dapp build",
     "test": "dapp test",
-    "debug": " hvem interactive"
+    "debug": " hvem interactive",
+    "testnet": "dapp testnet"
   },
   "repository": {
     "type": "git",
