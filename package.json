@@ -1,0 +1,24 @@
+{
+  "name": "proteav2contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "dapp build",
+    "test": "dapp test",
+    "debug": " hvem interactive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinumLabs/ProteaV2Contracts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LinumLabs/ProteaV2Contracts/issues"
+  },
+  "homepage": "https://github.com/LinumLabs/ProteaV2Contracts#readme"
+}
