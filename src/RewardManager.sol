@@ -1,6 +1,16 @@
 pragma solidity ^0.4.24;
 
 contract RewardManager {
+    address public tokenManager;
+    mapping (address => bool) public approvedIssuer;
+
+    constructor() {
+
+    }
+
+    function claimReward(address _issuer, uint256 _index) public {
+        
+    }
 }
 
 /*

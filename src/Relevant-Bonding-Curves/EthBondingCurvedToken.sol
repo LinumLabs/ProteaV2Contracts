@@ -1,5 +1,6 @@
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+pragma solidity ^0.4.24;
+import "../zeppelin-solidity/SafeMath.sol";
+import "../zeppelin-solidity/ERC20/StandardToken.sol";
 
 
 /// @title  EthBondingCurvedToken - A bonding curve

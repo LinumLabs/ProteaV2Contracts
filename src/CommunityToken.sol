@@ -2,10 +2,17 @@ pragma solidity ^0.4.24;
 
 import "./zeppelin-solidity/SafeMath.sol";
 import "./zeppelin-solidity/ERC20/StandardToken.sol";
+import "./Relevant-Bonding-Curves/EthBondingCurvedToken.sol";
+import "./ERC223/ERC223Receiver.sol";
+import "./zeppelin-solidity/AddressUtils.sol";
 
 contract CommunityToken is EthBondingCurvedToken {
     address public rewardManager;
-    uint8 public rewardPotTax;
+    uint256 public rewardPotTax;
+    using AddressUtils for address;
+
+    event Transfer(address indexed from, address indexed to, uint value, bytes data);
+    
 
     // uint256 constant private PRECISION = 10000000000;
     string public name;
@@ -54,7 +61,7 @@ contract CommunityToken is EthBondingCurvedToken {
         initalized = false;
         
         rewardManager = _rewardManager;
-        rewardPotTax = _rewardPotTax.dev(100);
+        rewardPotTax = _rewardPotTax;
 
         name = _name;
         decimals = _decimals;
@@ -64,7 +71,7 @@ contract CommunityToken is EthBondingCurvedToken {
 
         // don't actually need to do this - can store in logs!
         // imageHash = Multihash(_hash, _hashFunction, _size);
-        StoreHash(_hash, _hashFunction, _size);
+        emit StoreHash(_hash, _hashFunction, _size);
     }
 
     // @dev Add comment
@@ -76,7 +83,7 @@ contract CommunityToken is EthBondingCurvedToken {
         uint8 _hashFunction,
         uint8 _size
     ) public {
-        CommentLog(_hash, _hashFunction, _size, msg.sender);
+        emit CommentLog(_hash, _hashFunction, _size, msg.sender);
     }
 
     /// @dev        Calculate the integral from 0 to t
@@ -98,7 +105,7 @@ contract CommunityToken is EthBondingCurvedToken {
     /// @dev                Calculate the Community Added Tax(CAT) for funding the particiaption rewards
     /// @param numTokens    The number of tokens you want to mint
     function purchaseTax(uint256 numTokens) public returns(uint256) {
-        return numTokens.mul(taxRate).div(100);
+        return numTokens.mul(rewardPotTax).div(100);
     }
 
     /// @dev                Mint new tokens with ether
@@ -124,7 +131,57 @@ contract CommunityToken is EthBondingCurvedToken {
         emit Minted(numTokens, priceForTokens);
     }
 
+    function transfer(address _to, uint _value, bytes _data) public {
+        require(_value > 0, "Transfer amount invalid");
+        if(_to.isContract()) {
+            ERC223Receiver receiver = ERC223Receiver(_to);
+            receiver.tokenFallback(msg.sender, _value, _data);
+        }
+        balances[msg.sender] = balances[msg.sender].sub(_value);
+        balances[_to] = balances[_to].add(_value);
+        emit Transfer(msg.sender, _to, _value, _data);
+    }
+
+
     /// End Protea modifications
+
+
+    /// Really dont like this but until we can build the bytes in Web3 we need it in here
+    // struct EventData{
+    //     string name;
+    //     string date;
+    //     string location;
+    //     uint24 participantLimit;
+    //     uint8 state;        
+    //     // 0: Not created
+    //     // 1: Created
+    //     // 2: Concluded
+    //     // 3: Cancelled
+    //     uint256 requiredStake;
+    // }
+    // function exactEventStructToBytes(ExactUserStruct u) private
+    // returns (bytes data)
+    // {
+    //     // _size = "sizeof" u.id + "sizeof" u.name
+    //     uint _size = 4 + bytes(u.name).length;
+    //     bytes memory _data = new bytes(_size);
+
+    //     uint counter=0;
+    //     for (uint i=0;i<4;i++)
+    //     {
+    //         _data[counter]=byte(u.id>>(8*i)&uint32(255));
+    //         counter++;
+    //     }
+
+    //     for (i=0;i<bytes(u.name).length;i++)
+    //     {
+    //         _data[counter]=bytes(u.name)[i];
+    //         counter++;
+    //     }
+
+    //     return (_data);
+    // }
+
 
     event CommentLog (
         bytes32 hash,
