@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/LinumLabs/ProteaV2Contracts/issues"
   },
-  "homepage": "https://github.com/LinumLabs/ProteaV2Contracts#readme"
+  "homepage": "https://github.com/LinumLabs/ProteaV2Contracts#readme",
+  "dependencies": {
+    "zeppelin-solidity": "^1.12.0"
+  }
 }

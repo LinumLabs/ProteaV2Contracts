@@ -1,11 +1,11 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.23
 
-import "./zeppelin-solidity/SafeMath.sol";
-import "./zeppelin-solidity/ERC20/StandardToken.sol";
+import "./EthBondingCurvedToken.sol";
 
-contract CommunityToken is EthBondingCurvedToken {
-    address public rewardManager;
-    uint8 public rewardPotTax;
+
+/// @title  EthPolynomialCurvedToken - A polynomial bonding curve
+///         implementation that is backed by ether.
+contract EthPolynomialCurvedToken is EthBondingCurvedToken {
 
     // uint256 constant private PRECISION = 10000000000;
     string public name;
@@ -16,9 +16,9 @@ contract CommunityToken is EthBondingCurvedToken {
     bool initalized = false;
 
     struct Multihash {
-        bytes32 hash;
-        uint8 hash_function;
-        uint8 size;
+      bytes32 hash;
+      uint8 hash_function;
+      uint8 size;
     }
 
     // Multihash public imageHash;
@@ -37,8 +37,6 @@ contract CommunityToken is EthBondingCurvedToken {
     // @param _hashFunction     code for the hash function used
     // @param _size             length of the digest
     function initContract(
-        address _rewardManager,
-        uint8 _rewardPotTax,
         string _name,
         uint8 _decimals,
         string _symbol,
@@ -52,10 +50,6 @@ contract CommunityToken is EthBondingCurvedToken {
         // extra precautions
         require(poolBalance == 0 && totalSupply_ == 0);
         initalized = false;
-        
-        rewardManager = _rewardManager;
-        rewardPotTax = _rewardPotTax.dev(100);
-
         name = _name;
         decimals = _decimals;
         symbol = _symbol;
@@ -93,36 +87,6 @@ contract CommunityToken is EthBondingCurvedToken {
     function rewardForBurn(uint256 numTokens) public returns(uint256) {
         return poolBalance.sub(curveIntegral(totalSupply_.sub(numTokens)));
     }
-
-    /// Protea modifications
-    function purchaseTax(uint256 numTokens) public returns(uint256) {
-        return numTokens.mul(taxRate).div(100);
-    }
-
-    /// @dev                Mint new tokens with ether
-    /// @param numTokens    The number of tokens you want to mint
-    /// Notes: We have modified the minting function to tax the purchase tokens
-    /// This behaves as a sort of stake on buyers to participate even at a small scale
-    function mint(uint256 numTokens) public payable {
-        uint256 priceForTokens = priceToMint(numTokens);
-        require(msg.value >= priceForTokens);
-
-        totalSupply_ = totalSupply_.add(numTokens);
-        // Calculating the community tax
-        uint256 communityTax = purchaseTax(numTokens);
-        balances[msg.sender] = balances[msg.sender].add(numTokens.sub(communityTax));
-        // Here we add the tax to the community pot
-        balances[rewardManager] = balances[rewardManager].add(communityTax);
-
-        poolBalance = poolBalance.add(priceForTokens);
-        if (msg.value > priceForTokens) {
-            msg.sender.transfer(msg.value - priceForTokens);
-        }
-
-        emit Minted(numTokens, priceForTokens);
-    }
-
-    /// End Protea modifications
 
     event CommentLog (
         bytes32 hash,
