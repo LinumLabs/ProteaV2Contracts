@@ -26,6 +26,10 @@ module.exports = {
     rinkeby: {
       provider: () => new HDWalletProvider(MNEMONIC, 'https://rinkeby.infura.io/' + INFURA_API_KEY),
       network_id: 4
+    },
+    poa: {
+      network_id: 100,
+      host: "https://dai.poa.network",
     }
   },
   solc: {

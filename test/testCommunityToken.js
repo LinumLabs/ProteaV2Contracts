@@ -25,7 +25,7 @@ contract('CommunityToken', (accounts) => {
 
         communityToken = await CommunityToken.new({
             from: tokenOwnerAddress,
-
+            gas: 6721975
         })
 
         eventManager = await EventManager.new({
@@ -41,9 +41,28 @@ contract('CommunityToken', (accounts) => {
             // https://beresnev.pro/test-overloaded-solidity-functions-via-truffle/
             // Truffle unable to use overloaded functions, assuming target overload is last entry to the contract
             // Possible upgrade, include lodash to dynamically load abi function
-            console.log('ABI code', CommunityToken.contract.abi);
-            console.log('ABI code', EventManager.contract.abi);
-            let transferAbi = CommunityToken.contract.abi[communityToken.contract.abi.length - 1];
+            // console.log('ABI code', communityToken.contract.abi);
+            // console.log('ABI code', eventManager.contract.abi);
+            let transferAbi, rsvpAbi, createAbi;
+            communityToken.contract.abi.find((abiObj) => {
+                if(abiObj.name == 'transfer' && abiObj.type == 'function' && abiObj.inputs.length == 3){
+                    transferAbi = abiObj;
+                }
+            })
+            // Cant get abi for internal or private functions
+            // eventManager.contract.abi.find((abiObj) => {
+            //     if(abiObj.name == 'rsvp' && abiObj.type == 'function'){
+            //         rsvpAbi = abiObj;
+            //     }
+            //     if(abiObj.name == 'createEvent' && abiObj.type == 'function'){
+            //         createAbi = abiObj;
+            //     }
+            // });
+
+            // console.log(transferAbi);
+            rsvpAbi = {"constant":false,"inputs":[{"name":"_index","type":"uint256"},{"name":"_member","type":"address"}],"name":"rsvp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}
+            createAbi = {"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_date","type":"string"},{"name":"_location","type":"string"},{"name":"_participantLimit","type":"uint24"},{"name":"_organiser","type":"address"},{"name":"_requiredStake","type":"uint256"}],"name":"createEvent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}
+            // let transferAbi = communityToken.contract.abi[communityToken.contract.abi.length - 1];
             // const transferMethodTransactionData = web3Abi.encodeFunctionCall(
             //     transferAbi, [
             //         eventManager.address,
@@ -76,3 +95,35 @@ contract('CommunityToken', (accounts) => {
    
 
 });
+
+
+// ABI code [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
+//   { constant: false,
+//     inputs: [ [Object], [Object], [Object] ],
+//     name: 'transfer',
+//     outputs: [],
+//     payable: false,
+//     stateMutability: 'nonpayable',
+//     type: 'function' } ]
+
+
+
+
+
+
+    
+// ABI code [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,
+//   { constant: false,
+//     inputs: [ [Object], [Object], [Object] ],
+//     name: 'tokenFallback',
+//     outputs: [],
+//     payable: false,
+//     stateMutability: 'nonpayable',
+//     type: 'function' },
+//   { constant: true,
+//     inputs: [ [Object], [Object] ],
+//     name: 'payout',
+//     outputs: [ [Object] ],
+//     payable: false,
+//     stateMutability: 'view',
+//     type: 'function' } ]

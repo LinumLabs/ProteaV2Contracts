@@ -55,7 +55,7 @@ contract EventManager is RewardIssuerInterface, ERC223Receiver {
     function createEvent(
         string _name, string _date, string _location, 
         uint24 _participantLimit, address _organiser, uint256 _requiredStake) 
-        internal {
+        private {
         require(forwardStake(creationCost, _organiser), "Must forward funds to the reward manager");
         numberOfEvents += 1;
         events[numberOfEvents].name = _name;
@@ -86,7 +86,7 @@ contract EventManager is RewardIssuerInterface, ERC223Receiver {
         return true;
     }
 
-    function rsvp(uint256 _index, address _member) internal {
+    function rsvp(uint256 _index, address _member) private {
         require(forwardStake(events[_index].requiredStake, _member), "Must forward funds to the reward manager");
         /// Send stake to reward manager
         /// Updated state

@@ -1,10 +1,10 @@
 pragma solidity ^0.4.24;
 import "../zeppelin-solidity/SafeMath.sol";
-import "../ERC223StandardToken.sol";
+import "../zeppelin-solidity/ERC20/StandardToken.sol";
 
 /// @title  EthBondingCurvedToken - A bonding curve
 ///         implementation that is backed by ether.
-contract EthBondingCurvedToken is ERC223StandardToken {
+contract EthBondingCurvedToken is StandardToken {
 
     event Minted(uint256 amount, uint256 totalCost);
     event Burned(uint256 amount, uint256 reward);
