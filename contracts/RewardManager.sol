@@ -8,6 +8,10 @@ contract RewardManager {
 
     }
 
+    function initContract(address _tokenManager) public {
+        tokenManager = _tokenManager;
+    }
+
     function claimReward(address _issuer, uint256 _index) public {
         
     }
