@@ -17,14 +17,16 @@ contract('CommunityToken', (accounts) => {
     tokenOwnerAddress = accounts[0];
     adminAddress = accounts[1];
     userAddress = accounts[2];
-    beforeEach('', async () => {
+    beforeEach('Init', async () => {
+        rewardManager = await RewardManager.new({
+            from: tokenOwnerAddress,
+            gas: 6721975
+        });
+
         communityToken = await CommunityToken.new({
             from: tokenOwnerAddress,
-        })
 
-        rewardManager = await RewardManager.new({
-            from: tokenOwnerAddress
-        });
+        })
 
         eventManager = await EventManager.new({
             from: tokenOwnerAddress

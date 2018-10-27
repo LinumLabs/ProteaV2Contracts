@@ -20,13 +20,12 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 7545,
-      network_id: "*"
+      port: 8545,
+      network_id: "99"
     },
     rinkeby: {
-      provider: new HDWalletProvider(MNEMONIC, 'https://rinkeby.infura.io/' + INFURA_API_KEY),
-      network_id: 4,
-      gasPrice: 5000000000,
+      provider: () => new HDWalletProvider(MNEMONIC, 'https://rinkeby.infura.io/' + INFURA_API_KEY),
+      network_id: 4
     }
   },
   solc: {
