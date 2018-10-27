@@ -10,14 +10,16 @@ contract('CommunityToken', (accounts) => {
     let communityToken,
         eventManager,
         rewardManager,
+        tokenOwnerAddress,
         adminAddress,
         userAddress;
 
+    tokenOwnerAddress = accounts[0];
     adminAddress = accounts[1];
     userAddress = accounts[2];
     beforeEach('', async () => {
         communityToken = await CommunityToken.new({
-            from: tokenOwnerAddress
+            from: tokenOwnerAddress,
         })
 
         rewardManager = await RewardManager.new({

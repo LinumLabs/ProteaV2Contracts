@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "./zeppelin-solidity/SafeMath.sol";
-import "./zeppelin-solidity/ERC20/StandardToken.sol";
 import "./Relevant-Bonding-Curves/EthBondingCurvedToken.sol";
 import "./ERC223/ERC223Receiver.sol";
 import "./zeppelin-solidity/AddressUtils.sol";
@@ -9,10 +8,6 @@ import "./zeppelin-solidity/AddressUtils.sol";
 contract CommunityToken is EthBondingCurvedToken {
     address public rewardManager;
     uint256 public rewardPotTax;
-    using AddressUtils for address;
-
-    event Transfer(address indexed from, address indexed to, uint value, bytes data);
-    
 
     // uint256 constant private PRECISION = 10000000000;
     string public name;
@@ -28,14 +23,11 @@ contract CommunityToken is EthBondingCurvedToken {
         uint8 size;
     }
 
-    // Multihash public imageHash;
-
-    // @dev constructor        Initializes the bonding curve
-    // constructor() public {
-    // }
 
     // @dev initContract        Initializes the bonding curve
     // need to make sure this function is only called once
+
+    
     // @param _name             The name of the token
     // @param _decimals         The number of decimals to use
     // @param _symbol           The symbol of the token
@@ -144,44 +136,6 @@ contract CommunityToken is EthBondingCurvedToken {
 
 
     /// End Protea modifications
-
-
-    /// Really dont like this but until we can build the bytes in Web3 we need it in here
-    // struct EventData{
-    //     string name;
-    //     string date;
-    //     string location;
-    //     uint24 participantLimit;
-    //     uint8 state;        
-    //     // 0: Not created
-    //     // 1: Created
-    //     // 2: Concluded
-    //     // 3: Cancelled
-    //     uint256 requiredStake;
-    // }
-    // function exactEventStructToBytes(ExactUserStruct u) private
-    // returns (bytes data)
-    // {
-    //     // _size = "sizeof" u.id + "sizeof" u.name
-    //     uint _size = 4 + bytes(u.name).length;
-    //     bytes memory _data = new bytes(_size);
-
-    //     uint counter=0;
-    //     for (uint i=0;i<4;i++)
-    //     {
-    //         _data[counter]=byte(u.id>>(8*i)&uint32(255));
-    //         counter++;
-    //     }
-
-    //     for (i=0;i<bytes(u.name).length;i++)
-    //     {
-    //         _data[counter]=bytes(u.name)[i];
-    //         counter++;
-    //     }
-
-    //     return (_data);
-    // }
-
 
     event CommentLog (
         bytes32 hash,
