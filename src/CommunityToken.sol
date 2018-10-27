@@ -95,6 +95,8 @@ contract CommunityToken is EthBondingCurvedToken {
     }
 
     /// Protea modifications
+    /// @dev                Calculate the Community Added Tax(CAT) for funding the particiaption rewards
+    /// @param numTokens    The number of tokens you want to mint
     function purchaseTax(uint256 numTokens) public returns(uint256) {
         return numTokens.mul(taxRate).div(100);
     }
