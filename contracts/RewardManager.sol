@@ -10,7 +10,7 @@ contract RewardManager {
     mapping (address => uint256) public reputation;
 
     event RewardClaimed(address indexed account, uint256 amount);
-    constructor() {
+    constructor() public{
 
     }
 

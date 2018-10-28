@@ -91,11 +91,20 @@ library SafeMath {
     }
 }
 
+interface EventManagerDebug{
+    function createEventDebug(
+        string _name, string _date, string _location, 
+        uint24 _participantLimit, address _organiser, uint256 _requiredStake) 
+        external;
+    function rsvpDebug(uint256 _index, address _member) external;
+    function getEventStake(uint256 _index) public view returns(uint256);
+}
 
 contract DaiCommunityToken  {
     using SafeMath for uint256;
     using AddressUtils for address;
     
+    EventManagerDebug public eventManager;
     address public rewardManager;
     uint256 public rewardPotTax;
     uint256 public poolBalance;
@@ -270,5 +279,19 @@ contract DaiCommunityToken  {
         balances[msg.sender] = balances[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
         emit Transfer(msg.sender, _to, _value, _data);
+    }
+
+    // Due to being unable to execute encoded function calls through the transfer, we're circumventing that for the sake of the demo
+    function createEvent(string _name, string _date, string _location, uint24 _participantLimit, uint256 _requiredStake) public{
+        require(balances[msg.sender] >= 20, "Required stake not available");
+        require(transfer(rewardManager, 20), "Tokens not staked correctly");
+        eventManager.createEventDebug(_name, _date, _location, _participantLimit, msg.sender, _requiredStake);
+    }
+
+    function rsvp(uint256 _index) public{
+        uint256 stake = eventManager.getEventStake(_index);
+        require(balances[msg.sender] >= stake, "Required stake not available");
+        require(transfer(rewardManager, stake), "Tokens not staked correctly");
+        eventManager.rsvpDebug(_index, msg.sender);
     }
 }
