@@ -46,7 +46,7 @@ library SafeMath {
     }
 }
 
-contract StandardToken {
+contract PseudoDaiToken {
     using SafeMath for uint256;
     string public name;
     string public symbol;

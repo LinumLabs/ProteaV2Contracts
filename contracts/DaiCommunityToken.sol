@@ -92,7 +92,7 @@ library SafeMath {
 }
 
 
-contract CommunityToken  {
+contract DaiCommunityToken  {
     using SafeMath for uint256;
     using AddressUtils for address;
     
